@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ContextWords from "./components/ContextWords";
 import PopUpContent from "./components/PopUpContent";
 
@@ -16,25 +16,32 @@ function App() {
     value: words[0].value.split('')[0],
     id : 0
   })
+
+  const spanBottom = useRef()
+  const [span, setSpan] = useState('')
+  const spanPrevious = useRef(span)
   const [reLocate, setRelocate] = useState(60)
-  const [span, setSpan] = useState(131)
-
-  // useEffect(() => {
-  //   const span = document.querySelectorAll('#para > span')[letter.idWords].getBoundingClientRect().bottom
-  //   const para = document.querySelector('#para')
-  //   if(span < reLocate.value)
-  //   para.animate({top: `-${reLocate.top}px`})
-  // },[reLocate.value])
-
-  // console.log('test loop')
-
+  const [windowWidth, setWindowWidth] = useState('')
+  
   useEffect(()=>{
-    const spanvalue = document.querySelectorAll('#para > span')[letter.idWords].getBoundingClientRect().bottom
-    if(span == spanvalue && span != 131){
-      document.querySelector('#para').style.top = `${-reLocate}px`
-      setRelocate(prev => prev + 60)
-    }
-    }, [span])
+    setWindowWidth(window.innerWidth)
+    window.addEventListener('resize', ()=>{
+      setWindowWidth(window.innerWidth)
+    })
+  }, [windowWidth])
+
+  useEffect(() => {
+      setSpan(spanBottom.current.getBoundingClientRect().bottom)
+  }, [words[letter.idWords].value])
+
+  useEffect(() => {
+      if(spanPrevious.current && spanPrevious.current < span){
+          document.querySelector('#para').style.top = `${-reLocate}px`
+          setRelocate(prev => prev + 60)
+      }
+      spanPrevious.current = span
+  }, [span])
+
 
   useEffect(()=>{
     if(fullInput && fullInput.slice(0, -1) !== words[letter.idWords-1].value){
@@ -42,18 +49,11 @@ function App() {
         return (index === letter.idWords -1 ? {...e, isCorrect: true} : e)
       }))
     }
-
-    const spanvalue = document.querySelectorAll('#para > span')[letter.idWords].getBoundingClientRect().bottom
-    
-    if(span != spanvalue) {
-      setSpan(spanvalue)
-    }
   }, [words[letter.idWords].value])
 
   useEffect(()=>{
         if(clock >= 1 && inputLetter){setTimeout(()=>setClock(prev => prev-1), 1000)}
         if(clock === 0){
-          console.log('ban da hoan thanh SPEED TYPING TEST')
           localStorage.setItem('wpm',  JSON.stringify({
             'totalWords': letter.idWords+1,
             'wrongWords': words.filter(e => {
@@ -63,30 +63,6 @@ function App() {
           setTest(true)
         }
   },[clock])
-
-  function reStart(){
-    setWords(wordsValue())
-    setLetter(
-      {
-        idWords: 0,
-        value: words[0].value.split('')[0],
-        id : 0
-      }
-    )
-    setInputLetter('')
-    setFullinput('')
-    setTimeout(() => {
-      setClock(60)
-    }, 800);
-    document.querySelector('input').value = ''
-    console.log(document.querySelectorAll('#para > span')[letter.idWords].getBoundingClientRect().bottom)
-    setRelocate(0)
-    setSpan(131)
-  }
-
-  function turnOffPopUp(){
-    setTest(false)
-  }
 
   useEffect(()=>{
     if(inputLetter.value === ' '){
@@ -109,6 +85,31 @@ function App() {
       }))
     }
   }, [inputLetter])
+
+  function reStart(){
+    setWords(wordsValue())
+    setLetter(
+      {
+        idWords: 0,
+        value: words[0].value.split('')[0],
+        id : 0
+      }
+    )
+    setInputLetter('')
+    setFullinput('')
+    setTimeout(() => {
+      setClock(60)
+    }, 800);
+    document.querySelector('input').value = ''
+    document.querySelector('#para').style.top = `0px`
+    setSpan('')
+    setRelocate(60)
+  }
+
+  function turnOffPopUp(){
+    setTest(false)
+  }
+
 
   function wordsValue(){
     let newWords = paragraph.split(' ').map(e=>({
@@ -162,8 +163,11 @@ function App() {
       />
       <div className="off-pop-up" onClick={turnOffPopUp} style={{display: test? "flex" : "none"}}></div>
       <ContextWords
+        windowWidth = {windowWidth}
         words = {words} 
         letter = {letter}
+        spanBottom = {spanBottom}
+
       />
       <div className="control">
         <div className="control-child">

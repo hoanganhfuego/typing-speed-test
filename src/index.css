@@ -1,9 +1,13 @@
+html{
+  background-image: linear-gradient(315deg, #ff4e00 0%, #ec9f05 74%);
+  background-attachment: fixed;
+}
+
 body {
   margin: 0;
   font-family: 'Times New Roman', Times, serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: linear-gradient(315deg, #ff4e00 0%, #ec9f05 74%);
   background-size: contain;
 }
 
@@ -93,7 +97,6 @@ code {
   background-color: transparent;
   font-family: 'Times New Roman', Times, serif;
   border-radius: 7px;
-  box-shadow: none;
   border: none;
   width: 795px;
   height: 35px;
@@ -102,10 +105,6 @@ code {
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
-.control input:focus{
-  border: none;
-  outline: none;
-}
 
 .control .clock{
   color: black;
@@ -199,10 +198,6 @@ button:active{
   html{
     height: 100%;
   }
-  .body{
-    color: black;
-    background-image: linear-gradient(315deg, #ff4e00 0%, #ec9f05 74%);
-  }
   .main{
     width: 100%;
     height: 100%;
@@ -222,14 +217,6 @@ button:active{
     background-attachment: fixed; 
   }
 
-  input{
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  }
-
-  .control{
-    width: 955px;
-  }
-
   .control-child{
     width: inherit;
   }
@@ -239,12 +226,10 @@ button:active{
  }
 }
 
-@media only screen and (max-width: 812px){
+@media only screen and (max-width: 800px){
   html{
     height: 100%;
-  }
-  .body{
-    background-image: linear-gradient(315deg, #ff4e00 0%, #ec9f05 74%);
+    width: 100%;
   }
   .main{
     width: 100%;
@@ -262,19 +247,95 @@ button:active{
     background-clip: none;
   }
 
-  input{
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  .control input{
+    width: 400px;
   }
 
   .control{
-    width: 955px;
+    max-width: 100%;
   }
 
   .control-child{
     width: inherit;
   }
 
+  .essay{
+    max-width: 100%;
+  }
+
   button{
     color: black;
  }
+}
+
+@media only screen and (max-width: 768px) and (orientation: landscape)
+{
+  html{
+    height: 100%;
+    width: 100%;
+  }
+  .main{
+    width: 100%;
+    height: 100%;
+  }
+  #para{
+    padding: 10px;
+    margin: auto;
+    box-sizing: border-box;
+    width: 100% ;
+    position: absolute;
+    top: 0;
+    background-image: none;
+    -webkit-background-clip: none;
+    background-clip: none;
+  }
+
+  .control input{
+    width: 400px;
+  }
+
+  .control{
+    max-width: 100%;
+  }
+
+  .control-child{
+    width: inherit;
+  }
+
+  .essay{
+    max-width: 100%;
+  }
+
+  button{
+    color: black;
+ }
+}
+
+@media only screen and (max-width: 1600px) and (orientation: landscape)
+{
+  .control input{
+    width: 600px;
+    border: solid 2px black;
+    outline: none;
+  }
+
+  .control input:focus{
+    border: solid 2px black;
+  }
+  
+  .essay{
+    width: 800px;
+  }
+
+  body{
+    color: black;
+  }
+
+  i{
+    color: black;
+  }
+
+  ::placeholder{
+    color: gray;
+  }
 }
