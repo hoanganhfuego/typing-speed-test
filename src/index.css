@@ -96,6 +96,7 @@ code {
 .control input{
   background-color: transparent;
   font-family: 'Times New Roman', Times, serif;
+  outline: none;
   border-radius: 7px;
   border: none;
   width: 795px;
